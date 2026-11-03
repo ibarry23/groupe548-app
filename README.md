@@ -31,6 +31,13 @@ VITE_WEB3FORMS_KEY=<clé Web3Forms>
 
 Le site web actuel utilise déjà Web3Forms (sa clé publique est dans `.env.example`). L'app envoie les mêmes champs que le formulaire du site (`name`, `phone`, `email`, `city`, `service`, `description`, `date`, `language`) plus `reference` et `source=app`, donc les demandes arrivent dans la même boîte courriel, avec une référence lisible (ex. `G548-7K3Q`).
 
+## Hébergement actuel
+
+- Code source : https://github.com/ibarry23/groupe548-app (public, branche `main`).
+- Application en ligne (GitHub Pages, branche `gh-pages`) : **https://ibarry23.github.io/groupe548-app/** — installable comme PWA depuis Safari (Partager → Sur l'écran d'accueil) ou Chrome (Installer l'application).
+- Pour redéployer après un changement : `npm run build`, puis pousser le contenu de `dist/` sur la branche `gh-pages` (le script utilisé est documenté dans `docs/DEPLOY.md`).
+- Domaine personnalisé (ex. `app.groupe548.ca`) : Settings → Pages → Custom domain dans le dépôt GitHub, plus un enregistrement CNAME chez le registraire.
+
 ## Coques natives (iOS / Android)
 
 Les projets natifs ne sont pas générés dans ce dépôt (Xcode / Android Studio requis) :
