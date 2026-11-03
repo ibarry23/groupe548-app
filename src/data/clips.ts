@@ -28,6 +28,6 @@ export const TASK_CLIPS: Record<string, boolean> = {
   'window-cleaning': true,
   moving: true,
   'transport-delivery': true,
-  'interior-painting': false,
+  'interior-painting': true,
 };
 

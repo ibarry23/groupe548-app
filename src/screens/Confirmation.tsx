@@ -62,7 +62,7 @@ export function Confirmation() {
       </section>
 
       <div className="container stack-lg">
-        {status !== 'failed' && <AmbientClip name="confirmation" shape="wide" />}
+        {status !== 'failed' && <AmbientClip name="confirmation" shape="wide" caption={t.confirm.next[1].t} />}
         {status === 'failed' && (
           <Button icon="refresh" onClick={retry} loading={busy} disabled={!online}>
             {t.requests.resend}

@@ -125,7 +125,7 @@ export function RequestDetail() {
             {t.requests.resend}
           </Button>
         )}
-        {r.status !== 'failed' && <AmbientClip name="confirmation" shape="wide" />}
+        {r.status !== 'failed' && <AmbientClip name="confirmation" shape="wide" caption={t.confirm.next[1].t} />}
 
         {(r.status === 'sent' || r.status === 'demo') && (
           <section className="card card--pad">

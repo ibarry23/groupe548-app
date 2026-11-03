@@ -33,6 +33,8 @@ export interface Service {
   photo: boolean;
   /** cinematic clip for the service page hero (public/video/<id>.mp4 + <id>-poster.jpg) */
   clip?: boolean;
+  /** three short captions keyed to thirds of the 10-second sequence */
+  taskCaptions?: Record<Lang, [string, string, string]>;
   icon: 'spray' | 'building' | 'hardhat' | 'window' | 'truck' | 'box' | 'roller';
   name: L;
   short: L;
@@ -75,6 +77,7 @@ export const SERVICES: Service[] = [
     id: 'residential-cleaning',
     photo: true,
     clip: true,
+    taskCaptions: { fr: ['Comptoirs', 'Planchers', 'Finitions'], en: ['Counters', 'Floors', 'Finishing touches'] },
     family: 'cleaning',
     formValue: 'nettoyage-residuel',
     image: 'cleaning',
@@ -140,6 +143,7 @@ export const SERVICES: Service[] = [
     id: 'commercial-cleaning',
     photo: true,
     clip: true,
+    taskCaptions: { fr: ['Surfaces', 'Poubelles', 'Tapis et planchers'], en: ['Surfaces', 'Bins', 'Carpets and floors'] },
     family: 'cleaning',
     formValue: 'nettoyage-commercial',
     icon: 'building',
@@ -203,6 +207,7 @@ export const SERVICES: Service[] = [
     id: 'post-construction-cleaning',
     photo: true,
     clip: true,
+    taskCaptions: { fr: ['Poussière fine', 'Vitres et cadres', 'Planchers'], en: ['Fine dust', 'Glass and frames', 'Floors'] },
     family: 'cleaning',
     formValue: 'nettoyage-post-construction',
     icon: 'hardhat',
@@ -267,6 +272,7 @@ export const SERVICES: Service[] = [
     id: 'window-cleaning',
     photo: true,
     clip: true,
+    taskCaptions: { fr: ['Savonnage', 'Raclette', 'Cadres et rebords'], en: ['Soaping', 'Squeegee', 'Frames and sills'] },
     family: 'cleaning',
     formValue: 'lavage-vitres',
     icon: 'window',
@@ -328,6 +334,7 @@ export const SERVICES: Service[] = [
     id: 'moving',
     photo: true,
     clip: true,
+    taskCaptions: { fr: ['Protection', 'Chargement', 'Camion'], en: ['Wrapping', 'Loading', 'Into the truck'] },
     family: 'moving',
     formValue: 'demenagement',
     image: 'moving',
@@ -401,6 +408,7 @@ export const SERVICES: Service[] = [
     id: 'transport-delivery',
     photo: true,
     clip: true,
+    taskCaptions: { fr: ['Déchargement', 'Jusqu’à la porte', 'Remise en main propre'], en: ['Unloading', 'To your door', 'Handed over'] },
     family: 'moving',
     formValue: 'transport',
     image: 'transport',
@@ -455,6 +463,7 @@ export const SERVICES: Service[] = [
     id: 'interior-painting',
     photo: true,
     clip: true,
+    taskCaptions: { fr: ['Préparation', 'Découpe', 'Rouleau'], en: ['Preparation', 'Cutting in', 'Rolling'] },
     family: 'painting',
     formValue: 'peinture',
     image: 'painting',

@@ -48,9 +48,10 @@ function TabBar() {
           {({ isActive }) => (
             <>
               <span className="tab__iconwrap">
-                <Icon name={tab.icon} size={24} strokeWidth={isActive ? 2.1 : 1.7} />
+                <Icon key={isActive ? 'on' : 'off'} name={tab.icon} size={23} strokeWidth={isActive ? 2 : 1.7} draw={isActive} />
               </span>
-              <span>{tab.label}</span>
+              <span className="tab__label">{tab.label}</span>
+              <span className="tab__dot" />
               {tab.badge ? <span className="tab__badge">{tab.badge}</span> : null}
             </>
           )}

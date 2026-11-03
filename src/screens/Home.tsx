@@ -148,7 +148,7 @@ export function Home() {
             const clip = CLIPS[dedicated] ? dedicated : STEP_CLIPS[i];
             return (
               <div className="how" key={i}>
-                {clip ? <AmbientClip name={clip} shape="square" force /> : <div className="how__blank" />}
+                {clip ? <AmbientClip name={clip} shape="square" force numeral={`0${i + 1}`} /> : <div className="how__blank" />}
                 <div className="how__body">
                   <span className="step__num">{i + 1}</span>
                   <strong>{s.t}</strong>
