@@ -154,6 +154,13 @@ Living icons (CSS/SVG, no assets): stroke draw-on for check lists, trust facts a
 
 **Score, objectively.** Design 8.5/10 — identity, media and craft are at the level of the best consumer apps; the half point missing is real-device verification and real photography. Experience 8/10 — the quote journey and post-send actions are better than any competitor reviewed; what remains cannot be built from this machine: live request status and customer notifications (a backend), photo attachments reaching the team, native store builds, and a screen-reader walkthrough on real hardware. Those are the path from 8 to 10, and each is scoped in §8.
 
+### Pass 8 — meaningful motion, invisible loops
+
+- **Every clip now explains something.** The four "Comment ça se passe" steps are illustrated by scenes that *are* the step: a man typing the request on his sofa (bordeaux cushion), a coordinator with a headset taking notes, a pen running down a printed itemized quote, and the handshake at the door of the finished home. Service pages carry an "En 10 secondes" slot for a continuous-take sequence of what the team actually does (switched on per service in `src/data/clips.ts` → `TASK_CLIPS`).
+- **Loops no longer read as loops.** All clips were re-processed (`scripts/loop-clips.py`) with a longer dissolve — 1.0 s on people scenes, 1.2–1.4 s on ambient scenes — so the tail melts into the head instead of cutting; the poster is the exact first frame of the loop, so the image→video hand-off is invisible too.
+- **Customer-maintained progress** on each request ("Où en êtes-vous?") replaces the empty promise of status tracking until a backend exists.
+- Working rules while generating in a shared Higgsfield account: only jobs whose prompt text matches ours are fetched; no user images or clips are touched; composer settings are restored (1:1 / 5 s) when done.
+
 Remaining, deliberately not done: Capacitor status-bar styling per screen (needs the native shells to test), and in-app reading of the website guides (the site is a SPA; links open in the browser).
 
 ## 7. What was tested
