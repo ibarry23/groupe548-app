@@ -25,7 +25,7 @@ export const TASK_CLIPS: Record<string, boolean> = {
   'residential-cleaning': true,
   'commercial-cleaning': true,
   'post-construction-cleaning': true,
-  'window-cleaning': false,
+  'window-cleaning': true,
   moving: false,
   'transport-delivery': false,
   'interior-painting': false,
