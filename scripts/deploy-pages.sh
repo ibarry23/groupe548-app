@@ -16,7 +16,7 @@ if git diff --cached --quiet; then
   echo "Nothing changed since the last deploy."
 else
   git commit -q -m "Deploy Groupe 548 app ($(date -u +%Y-%m-%dT%H:%MZ))"
-  git -c http.postBuffer=524288000 push -q origin gh-pages
+  git -c http.postBuffer=524288000 -c http.version=HTTP/1.1 push -q origin gh-pages
   echo "Deployed: https://ibarry23.github.io/groupe548-app/"
 fi
 cd "$ROOT"

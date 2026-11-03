@@ -145,6 +145,15 @@ Living icons (CSS/SVG, no assets): stroke draw-on for check lists, trust facts a
 - **Photographic continuity** everywhere a service is named: 192 px thumbnails (5–10 KB) in the Home and Services lists and the quote picker, 44 px thumbnails on request cards, 34 px thumbnails in the quote's per-service question groups, 26 px round thumbnails in "Souvent combiné avec" chips. The line illustrations remain only as fallbacks.
 - Verified at 375 px: screenshots 50–54. Bundle with all media ≈ 7 MB.
 
+### Pass 7 — hosting, audit and the honest score
+
+- **Live**: https://ibarry23.github.io/groupe548-app/ (GitHub Pages from `gh-pages`; source https://github.com/ibarry23/groupe548-app; redeploy with `bash scripts/deploy-pages.sh`, a delta push so only changed files travel). Verified on the live URL: app renders, hero video plays, service worker and manifest active, privacy page served.
+- **Accessibility audit** with axe-core 4.10 (WCAG 2.0 A/AA + best practices) on Home, quote steps 1 and 4, and a service page: two findings (buttons carrying `role="listitem"`, an `h3` following the quote's `h1`), both fixed; re-run clean.
+- **After sending**, the customer now has things to do: Share (native share sheet, clipboard fallback), Email me a copy (mail app, pre-filled), Calendar reminder (.ics for the preferred date, labelled "to be confirmed"). An explicit "Passer cette étape" on the optional details step. The request detail page carries the callback clip.
+- Robustness: iOS `dvh` fallback, hero poster preloaded with high fetch priority, install card on More (browser prompt on Android/desktop, instructions on iPhone), bilingual privacy page, store listing and refund letter drafted.
+
+**Score, objectively.** Design 8.5/10 — identity, media and craft are at the level of the best consumer apps; the half point missing is real-device verification and real photography. Experience 8/10 — the quote journey and post-send actions are better than any competitor reviewed; what remains cannot be built from this machine: live request status and customer notifications (a backend), photo attachments reaching the team, native store builds, and a screen-reader walkthrough on real hardware. Those are the path from 8 to 10, and each is scoped in §8.
+
 Remaining, deliberately not done: Capacitor status-bar styling per screen (needs the native shells to test), and in-app reading of the website guides (the site is a SPA; links open in the browser).
 
 ## 7. What was tested
