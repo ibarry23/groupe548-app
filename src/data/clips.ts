@@ -24,7 +24,7 @@ export const STEP_CLIPS: string[] = ['empty-requests', 'confirmation', 'services
 export const TASK_CLIPS: Record<string, boolean> = {
   'residential-cleaning': true,
   'commercial-cleaning': true,
-  'post-construction-cleaning': false,
+  'post-construction-cleaning': true,
   'window-cleaning': false,
   moving: false,
   'transport-delivery': false,
