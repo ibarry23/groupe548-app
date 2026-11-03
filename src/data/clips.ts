@@ -10,7 +10,7 @@ export const CLIPS: Record<ClipName, boolean> = {
   about: true,
   'step-contact': true,
   'step-clarify': true,
-  'step-quote': false,
+  'step-quote': true,
   'step-done': false,
 };
 
