@@ -22,7 +22,7 @@ export const STEP_CLIPS: string[] = ['empty-requests', 'confirmation', 'services
 
 /** Services that have a "what's included" multi-shot clip at public/video/<id>-tasks.mp4 (+ -tasks-poster.jpg). */
 export const TASK_CLIPS: Record<string, boolean> = {
-  'residential-cleaning': false,
+  'residential-cleaning': true,
   'commercial-cleaning': false,
   'post-construction-cleaning': false,
   'window-cleaning': false,
