@@ -5,7 +5,7 @@ import { PHONES } from '../i18n';
 import { Icon, type IconName } from '../components/Icons';
 import { Button, CallLink, Note } from '../components/ui';
 import { byId } from '../data/services';
-import { downloadIcs, shareText } from '../lib/format';
+import { downloadIcs, mailtoCopy, shareText } from '../lib/format';
 import { AmbientClip } from '../components/Media';
 
 export function Confirmation() {
@@ -25,6 +25,7 @@ export function Confirmation() {
     if (r === 'copied') toast(t.confirm.shared, 'success');
   };
   const calendar = () => req?.draft.date && downloadIcs(req.ref, req.draft.date, t.confirm.calendarTitle, t.confirm.calendarDesc(req.ref));
+  const emailCopy = () => req && mailtoCopy(req.draft.email, t.confirm.emailSubject(req.ref), t.confirm.shareText(req.ref, req.draft.services.map((s) => byId(s).name[lang]).join(' + ')));
   const copyRef = () => {
     if (!ref || !navigator.clipboard) return;
     navigator.clipboard.writeText(ref).then(() => toast(t.confirm.copied, 'success')).catch(() => {});
@@ -94,6 +95,9 @@ export function Confirmation() {
           <div className="btn-row">
             <Button variant="secondary" icon="external" onClick={share}>
               {t.confirm.share}
+            </Button>
+            <Button variant="secondary" icon="mail" onClick={emailCopy}>
+              {t.confirm.emailCopy}
             </Button>
             {req.draft.date && !req.draft.asap && (
               <Button variant="secondary" icon="calendar" onClick={calendar}>

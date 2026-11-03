@@ -91,9 +91,9 @@ export function Home() {
         <p className="body" style={{ marginTop: 6 }}>
           {t.home.situationsSub}
         </p>
-        <div className="sit-row stagger" style={{ marginTop: 16 }} role="list">
+        <div className="sit-row stagger" style={{ marginTop: 16 }} aria-label={t.home.situationsTitle}>
           {SITUATIONS.map((s) => (
-            <button key={s.id} type="button" className="sit sit--photo" role="listitem" onClick={() => nav(`/quote?situation=${s.id}`)}>
+            <button key={s.id} type="button" className="sit sit--photo" onClick={() => nav(`/quote?situation=${s.id}`)}>
               <img className="sit__photo" src={`${import.meta.env.BASE_URL}img/thumbs/${s.services[0]}-lg.jpg`} alt="" loading="lazy" width={360} height={360} />
               <span className="sit__shade" aria-hidden="true" />
               <span className="sit__ico">

@@ -231,9 +231,9 @@ function StepServices({ errors }: { errors: Record<string, string> }) {
       )}
       {FAMILIES.map((fam) => (
         <section key={fam} style={{ marginBottom: 18 }}>
-          <h3 className="eyebrow" style={{ marginBottom: 10 }}>
+          <h2 className="eyebrow" style={{ marginBottom: 10 }}>
             {t.services.families[fam]}
-          </h3>
+          </h2>
           <div className="stack" role="group" aria-label={t.services.families[fam]}>
             {SERVICES.filter((s) => s.family === fam).map((s) => {
               const on = draft.services.includes(s.id);
@@ -290,10 +290,10 @@ function StepDetails() {
         const svc = byId(sid);
         return (
           <section className="qgroup" key={sid}>
-            <h3 className="qgroup__title">
+            <h2 className="qgroup__title">
               {svc.clip ? <img className="qgroup__thumb" src={`${import.meta.env.BASE_URL}img/thumbs/${svc.id}.jpg`} alt="" width={34} height={34} /> : <Icon name={svc.icon} size={20} />}
               <span className="h3">{svc.name[lang]}</span>
-            </h3>
+            </h2>
             {svc.questions.map((q) => {
               const key = `${sid}.${q.id}`;
               if (q.type === 'text') {
@@ -323,10 +323,10 @@ function StepDetails() {
       })}
 
       <section className="qgroup">
-        <h3 className="qgroup__title">
+        <h2 className="qgroup__title">
           <Icon name="camera" size={20} />
           <span className="h3">{t.quote.photos}</span>
-        </h3>
+        </h2>
         <p className="small" style={{ marginBottom: 12 }}>
           {t.quote.photosHint}
         </p>

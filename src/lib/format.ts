@@ -145,3 +145,8 @@ export function downloadIcs(ref: string, dateIso: string, title: string, descrip
   a.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
+
+/** Opens the mail app with a summary addressed to the customer (no server involved). */
+export function mailtoCopy(to: string, subject: string, body: string) {
+  window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}

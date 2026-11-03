@@ -7,7 +7,7 @@ import { cityLabel, describeAnswers, type SavedRequest } from '../lib/submit';
 import { formatDate } from '../lib/format';
 import { Icon } from '../components/Icons';
 import { Button, CallLink, Empty, Sheet, StatusPill, TopBar } from '../components/ui';
-import { downloadIcs, shareText } from '../lib/format';
+import { downloadIcs, mailtoCopy, shareText } from '../lib/format';
 import { AmbientClip } from '../components/Media';
 
 const titleOf = (r: SavedRequest, lang: 'fr' | 'en') => r.draft.services.map((s) => byId(s).name[lang]).join(' + ');
@@ -93,6 +93,7 @@ export function RequestDetail() {
     if (res === 'copied') toast(t.confirm.shared, 'success');
   };
   const calendar = () => r.draft.date && downloadIcs(r.ref, r.draft.date, t.confirm.calendarTitle, t.confirm.calendarDesc(r.ref));
+  const emailCopy = () => mailtoCopy(r.draft.email, t.confirm.emailSubject(r.ref), t.confirm.shareText(r.ref, titleOf(r, lang)));
   const groups = describeAnswers(r.draft, lang);
 
   const repeat = () => {
@@ -200,6 +201,9 @@ export function RequestDetail() {
         <div className="btn-row">
           <Button variant="secondary" icon="external" onClick={share}>
             {t.confirm.share}
+          </Button>
+          <Button variant="secondary" icon="mail" onClick={emailCopy}>
+            {t.confirm.emailCopy}
           </Button>
           {r.draft.date && !r.draft.asap && (
             <Button variant="secondary" icon="calendar" onClick={calendar}>

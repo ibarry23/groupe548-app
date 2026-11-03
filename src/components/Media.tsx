@@ -37,7 +37,7 @@ export function AmbientVideo({ src, poster, className = '' }: { src: string; pos
 
   return (
     <div className={`ambient ${className}`} aria-hidden="true">
-      <img className="ambient__poster" src={poster} alt="" decoding="async" />
+      <img className="ambient__poster" src={poster} alt="" decoding="async" {...{ fetchpriority: 'high' }} />
       {enabled && <video ref={ref} className={`ambient__video ${ready ? 'ambient__video--on' : ''}`} src={src} poster={poster} muted loop playsInline autoPlay preload="auto" disablePictureInPicture />}
     </div>
   );
