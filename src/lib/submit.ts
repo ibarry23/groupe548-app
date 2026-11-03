@@ -34,11 +34,15 @@ export interface QuoteDraft {
 
 export type RequestStatus = 'sent' | 'queued' | 'demo' | 'failed';
 
+export type CustomerStage = 'sent' | 'quoted' | 'scheduled' | 'done';
+
 export interface SavedRequest {
   ref: string;
   createdAt: string;
   sentAt?: string;
   status: RequestStatus;
+  /** Progress noted by the customer themselves (no backend updates this). */
+  stage?: CustomerStage;
   draft: Omit<QuoteDraft, 'photos' | 'step'> & { photoCount: number };
 }
 

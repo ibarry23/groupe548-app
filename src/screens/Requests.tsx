@@ -3,10 +3,10 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../lib/store';
 import { PHONES } from '../i18n';
 import { byId } from '../data/services';
-import { cityLabel, describeAnswers, type SavedRequest } from '../lib/submit';
+import { cityLabel, describeAnswers, type CustomerStage, type SavedRequest } from '../lib/submit';
 import { formatDate } from '../lib/format';
 import { Icon } from '../components/Icons';
-import { Button, CallLink, Empty, Sheet, StatusPill, TopBar } from '../components/ui';
+import { Button, CallLink, Chip, Empty, Sheet, StatusPill, TopBar } from '../components/ui';
 import { downloadIcs, mailtoCopy, shareText } from '../lib/format';
 import { AmbientClip } from '../components/Media';
 
@@ -55,7 +55,7 @@ export function Requests() {
             <button type="button" className="req" key={r.ref} onClick={() => nav(`/requests/${r.ref}`)}>
               <div className="req__top">
                 <span className="req__ref">{r.ref}</span>
-                <StatusPill status={r.status} />
+                {r.stage && r.stage !== 'sent' ? <span className="status status--sent">{t.requests.stages[r.stage]}</span> : <StatusPill status={r.status} />}
               </div>
               <div className="req__body">
                 <img className="req__thumb" src={`${import.meta.env.BASE_URL}img/thumbs/${r.draft.services[0]}.jpg`} alt="" loading="lazy" width={44} height={44} />
@@ -77,7 +77,7 @@ export function Requests() {
 
 export function RequestDetail() {
   const { ref } = useParams();
-  const { t, lang, requests, resend, removeRequest, setDraft, online, toast } = useApp();
+  const { t, lang, requests, resend, removeRequest, updateRequest, setDraft, online, toast } = useApp();
   const nav = useNavigate();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -126,6 +126,22 @@ export function RequestDetail() {
           </Button>
         )}
         {r.status !== 'failed' && <AmbientClip name="confirmation" shape="wide" />}
+
+        {(r.status === 'sent' || r.status === 'demo') && (
+          <section className="card card--pad">
+            <h2 className="h3">{t.requests.stageTitle}</h2>
+            <p className="small" style={{ marginTop: 4, marginBottom: 12 }}>
+              {t.requests.stageSub}
+            </p>
+            <div className="chips">
+              {(['sent', 'quoted', 'scheduled', 'done'] as CustomerStage[]).map((st) => (
+                <Chip key={st} on={(r.stage ?? 'sent') === st} onClick={() => updateRequest(r.ref, { stage: st })}>
+                  {t.requests.stages[st]}
+                </Chip>
+              ))}
+            </div>
+          </section>
+        )}
 
         <div className="review">
           <section className="review__sec">

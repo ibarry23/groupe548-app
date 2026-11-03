@@ -4,6 +4,7 @@ import { byId, SERVICES, type ServiceId } from '../data/services';
 import { Icon } from '../components/Icons';
 import { Accordion, Button, Note } from '../components/ui';
 import { AmbientVideo, LivingPhoto } from '../components/Media';
+import { TASK_CLIPS } from '../data/clips';
 
 const img = (name: string) => `${import.meta.env.BASE_URL}img/${name}.webp`;
 
@@ -42,6 +43,18 @@ export function ServiceDetail() {
         <p className="lead" style={{ marginTop: 14 }}>
           {svc.lead[lang]}
         </p>
+
+        {TASK_CLIPS[svc.id] && (
+          <section className="section">
+            <h2 className="h3">{t.services.inAction}</h2>
+            <p className="small" style={{ marginTop: 4, marginBottom: 12 }}>
+              {t.services.inActionSub}
+            </p>
+            <div className="clip-card clip-card--wide" aria-hidden="true">
+              <AmbientVideo src={`${import.meta.env.BASE_URL}video/${svc.id}-tasks.mp4`} poster={`${import.meta.env.BASE_URL}img/photos/${svc.id}-tasks-poster.jpg`} className="ambient--clip" />
+            </div>
+          </section>
+        )}
 
         <section className="section">
           <h2 className="h3">{t.services.included}</h2>

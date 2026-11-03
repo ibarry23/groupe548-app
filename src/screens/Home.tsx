@@ -5,7 +5,8 @@ import { PHONES } from '../i18n';
 import { SERVICES, SITUATIONS, byId } from '../data/services';
 import { Icon, type IconName } from '../components/Icons';
 import { Button, CallLink } from '../components/ui';
-import { AmbientVideo } from '../components/Media';
+import { AmbientClip, AmbientVideo } from '../components/Media';
+import { CLIPS, STEP_CLIPS, type ClipName } from '../data/clips';
 
 const img = (name: string) => `${import.meta.env.BASE_URL}img/${name}.webp`;
 const TRUST_ICONS: IconName[] = ['globe', 'clock', 'receipt', 'leaf', 'sparkles', 'map-pin'];
@@ -141,16 +142,21 @@ export function Home() {
         <p className="body" style={{ marginTop: 6 }}>
           {t.home.howSub}
         </p>
-        <div className="steps" style={{ marginTop: 10 }}>
-          {t.steps.map((s, i) => (
-            <div className="step" key={i}>
-              <span className="step__num">{i + 1}</span>
-              <div>
-                <strong>{s.t}</strong>
-                <span>{s.d}</span>
+        <div className="howrow stagger" style={{ marginTop: 14 }} aria-label={t.home.howTitle}>
+          {t.steps.map((s, i) => {
+            const dedicated = (['step-contact', 'step-clarify', 'step-quote', 'step-done'] as ClipName[])[i];
+            const clip = CLIPS[dedicated] ? dedicated : STEP_CLIPS[i];
+            return (
+              <div className="how" key={i}>
+                {clip ? <AmbientClip name={clip} shape="square" force /> : <div className="how__blank" />}
+                <div className="how__body">
+                  <span className="step__num">{i + 1}</span>
+                  <strong>{s.t}</strong>
+                  <span>{s.d}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -174,23 +180,12 @@ export function Home() {
       </section>
 
       <section className="container section">
-        <h2 className="h2">{t.home.areasTitle}</h2>
-        <div className="areas" style={{ marginTop: 12 }}>
-          {t.areas.map((a) => (
-            <span className="area" key={a}>
-              {a}
-            </span>
-          ))}
-        </div>
-        <p className="small" style={{ marginTop: 10 }}>
-          {t.home.areasNote}
-        </p>
-      </section>
-
-      <section className="container section">
         <h2 className="h2">{t.home.callTitle}</h2>
         <p className="body" style={{ marginTop: 6 }}>
           {t.home.callSub}
+        </p>
+        <p className="small" style={{ marginTop: 8 }}>
+          <strong className="strong">{t.home.areasTitle} :</strong> {t.home.areasInline}. {t.home.areasNote}
         </p>
         <div className="phones" style={{ marginTop: 14 }}>
           {PHONES.map((p) => (

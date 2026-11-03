@@ -64,8 +64,8 @@ export function LivingPhoto({ src, alt = '', className = '', priority }: { src: 
 }
 
 /** A rounded card holding an ambient clip; renders nothing until the clip exists in the manifest. */
-export function AmbientClip({ name, shape = 'square' }: { name: ClipName; shape?: 'square' | 'wide' | 'portrait' }) {
-  if (!CLIPS[name]) return null;
+export function AmbientClip({ name, shape = 'square', force }: { name: ClipName | string; shape?: 'square' | 'wide' | 'portrait'; force?: boolean }) {
+  if (!force && !CLIPS[name as ClipName]) return null;
   const base = import.meta.env.BASE_URL;
   return (
     <div className={`clip-card clip-card--${shape}`} aria-hidden="true">

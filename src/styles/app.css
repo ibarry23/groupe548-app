@@ -2392,3 +2392,64 @@ select.input {
     min-height: 100vh;
   }
 }
+
+/* ---------- video-illustrated process steps ---------- */
+.howrow {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px var(--gutter) 12px;
+  margin: 0 calc(-1 * var(--gutter));
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.howrow::-webkit-scrollbar {
+  display: none;
+}
+.how {
+  flex: 0 0 236px;
+  scroll-snap-align: start;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.how .clip-card {
+  border-radius: 0;
+  box-shadow: none;
+  max-width: none;
+  aspect-ratio: 4 / 3;
+  animation: none;
+}
+.how .clip-card .ambient {
+  border-radius: 0;
+}
+.how__blank {
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(180deg, var(--ivory-100), var(--ivory-200));
+}
+.how__body {
+  padding: 12px 14px 14px;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 4px 10px;
+  align-items: center;
+}
+.how__body .step__num {
+  width: 30px;
+  height: 30px;
+  font-size: 0.95rem;
+  grid-row: span 2;
+  align-self: start;
+}
+.how__body strong {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+.how__body span {
+  font-size: 0.84rem;
+  color: var(--fg-muted);
+  line-height: 1.4;
+}
