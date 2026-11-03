@@ -2364,3 +2364,27 @@ select.input {
   border-color: var(--brass-300);
   background: linear-gradient(180deg, var(--surface), var(--brass-100));
 }
+
+.btn-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.btn-row > :only-child {
+  grid-column: 1 / -1;
+}
+.flow__foot .btn--ghost.btn--auto {
+  flex: 0 0 auto;
+  padding: 0 14px;
+  min-height: 52px;
+  white-space: nowrap;
+}
+/* older iOS Safari without dvh */
+@supports not (height: 100dvh) {
+  #root,
+  .screen,
+  .flow,
+  .crash {
+    min-height: 100vh;
+  }
+}

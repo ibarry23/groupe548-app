@@ -4,11 +4,13 @@ import { useApp } from '../lib/store';
 import { PHONES } from '../i18n';
 import { Icon, type IconName } from '../components/Icons';
 import { Button, CallLink, Note } from '../components/ui';
+import { byId } from '../data/services';
+import { downloadIcs, shareText } from '../lib/format';
 import { AmbientClip } from '../components/Media';
 
 export function Confirmation() {
   const { ref } = useParams();
-  const { t, requests, resend, online, toast } = useApp();
+  const { t, lang, requests, resend, online, toast } = useApp();
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
   const retry = async () => {
@@ -17,6 +19,12 @@ export function Confirmation() {
     await resend(ref);
     setBusy(false);
   };
+  const share = async () => {
+    if (!req) return;
+    const r = await shareText('Groupe 548', t.confirm.shareText(req.ref, req.draft.services.map((s) => byId(s).name[lang]).join(' + ')));
+    if (r === 'copied') toast(t.confirm.shared, 'success');
+  };
+  const calendar = () => req?.draft.date && downloadIcs(req.ref, req.draft.date, t.confirm.calendarTitle, t.confirm.calendarDesc(req.ref));
   const copyRef = () => {
     if (!ref || !navigator.clipboard) return;
     navigator.clipboard.writeText(ref).then(() => toast(t.confirm.copied, 'success')).catch(() => {});
@@ -82,6 +90,18 @@ export function Confirmation() {
           {t.confirm.tipBody}
         </Note>
 
+        {req && status !== 'failed' && (
+          <div className="btn-row">
+            <Button variant="secondary" icon="external" onClick={share}>
+              {t.confirm.share}
+            </Button>
+            {req.draft.date && !req.draft.asap && (
+              <Button variant="secondary" icon="calendar" onClick={calendar}>
+                {t.confirm.calendar}
+              </Button>
+            )}
+          </div>
+        )}
         <div className="stack">
           <CallLink tel={PHONES[0].tel} className="btn btn--secondary">
             {t.confirm.callAbout}

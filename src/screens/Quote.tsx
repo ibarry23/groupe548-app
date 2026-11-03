@@ -168,6 +168,11 @@ export function Quote() {
       </div>
 
       <div className="flow__foot">
+        {step === 1 && (
+          <Button variant="ghost" className="btn--auto" onClick={next}>
+            {t.quote.skipStep}
+          </Button>
+        )}
         {step < STEPS - 1 ? (
           <Button onClick={next} iconRight="arrow-right">
             {t.common.next}

@@ -9,7 +9,13 @@ https://ibarry23.github.io/groupe548-app/ (`base: './'` dans `vite.config.ts`, r
 npm run build
 ```
 
-Puis, depuis le dossier du projet (Git Bash) :
+Ou simplement :
+
+```bash
+bash scripts/deploy-pages.sh
+```
+
+Ce que fait le script, si vous préférez le faire à la main (Git Bash) :
 
 ```bash
 touch dist/.nojekyll && rm -rf /tmp/g548-pages && mkdir -p /tmp/g548-pages && cp -r dist/. /tmp/g548-pages/ && cd /tmp/g548-pages && git init -q && git checkout -q -b gh-pages && git add -A && git commit -q -m "Deploy Groupe 548 app" && git remote add origin https://github.com/ibarry23/groupe548-app.git && git push -f -q origin gh-pages && cd -

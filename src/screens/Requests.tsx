@@ -7,6 +7,7 @@ import { cityLabel, describeAnswers, type SavedRequest } from '../lib/submit';
 import { formatDate } from '../lib/format';
 import { Icon } from '../components/Icons';
 import { Button, CallLink, Empty, Sheet, StatusPill, TopBar } from '../components/ui';
+import { downloadIcs, shareText } from '../lib/format';
 import { AmbientClip } from '../components/Media';
 
 const titleOf = (r: SavedRequest, lang: 'fr' | 'en') => r.draft.services.map((s) => byId(s).name[lang]).join(' + ');
@@ -87,6 +88,11 @@ export function RequestDetail() {
     await resend(r.ref);
     setBusy(false);
   };
+  const share = async () => {
+    const res = await shareText('Groupe 548', t.confirm.shareText(r.ref, titleOf(r, lang)));
+    if (res === 'copied') toast(t.confirm.shared, 'success');
+  };
+  const calendar = () => r.draft.date && downloadIcs(r.ref, r.draft.date, t.confirm.calendarTitle, t.confirm.calendarDesc(r.ref));
   const groups = describeAnswers(r.draft, lang);
 
   const repeat = () => {
@@ -118,6 +124,7 @@ export function RequestDetail() {
             {t.requests.resend}
           </Button>
         )}
+        {r.status !== 'failed' && <AmbientClip name="confirmation" shape="wide" />}
 
         <div className="review">
           <section className="review__sec">
@@ -190,6 +197,16 @@ export function RequestDetail() {
           </section>
         </div>
 
+        <div className="btn-row">
+          <Button variant="secondary" icon="external" onClick={share}>
+            {t.confirm.share}
+          </Button>
+          {r.draft.date && !r.draft.asap && (
+            <Button variant="secondary" icon="calendar" onClick={calendar}>
+              {t.confirm.calendar}
+            </Button>
+          )}
+        </div>
         <div className="stack">
           <CallLink tel={PHONES[0].tel} className="btn btn--secondary">
             {t.confirm.callAbout}

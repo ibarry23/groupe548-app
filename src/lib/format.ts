@@ -111,3 +111,37 @@ export function haptic(kind: 'light' | 'success' | 'error' = 'light') {
     /* unsupported */
   }
 }
+
+/** Native share sheet when available, otherwise copy to the clipboard. Returns 'shared' | 'copied' | 'failed'. */
+export async function shareText(title: string, text: string): Promise<'shared' | 'copied' | 'failed'> {
+  try {
+    if (navigator.share) {
+      await navigator.share({ title, text });
+      return 'shared';
+    }
+    await navigator.clipboard.writeText(text);
+    return 'copied';
+  } catch {
+    return 'failed';
+  }
+}
+
+/** Offers an all-day .ics reminder for the preferred date (opens Calendar on iOS/Android). */
+export function downloadIcs(ref: string, dateIso: string, title: string, description: string) {
+  const start = dateIso.replace(/-/g, '');
+  const d = new Date(`${dateIso}T12:00:00`);
+  d.setDate(d.getDate() + 1);
+  const end = `${d.getFullYear()}${`${d.getMonth() + 1}`.padStart(2, '0')}${`${d.getDate()}`.padStart(2, '0')}`;
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const esc = (t: string) => t.replace(/\\/g, '\\\\').replace(/,/g, '\\,').replace(/;/g, '\\;');
+  const body = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Groupe 548//App//FR', 'BEGIN:VEVENT', `UID:${ref}@groupe548.app`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${start}`, `DTEND;VALUE=DATE:${end}`, `SUMMARY:${esc(title)}`, `DESCRIPTION:${esc(description)}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+  const blob = new Blob([body], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `groupe548-${ref}.ics`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
