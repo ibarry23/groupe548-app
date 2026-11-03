@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr-CA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#4A1420" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#161012" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Groupe 548" />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta
+      name="description"
+      content="Groupe 548 — nettoyage, déménagement, transport et peinture à Montréal. Demandez une soumission écrite gratuite depuis votre téléphone."
+    />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icon-192.png" />
+    <title>Groupe 548</title>
+    <script type="module" crossorigin src="./assets/index-D3czYF-0.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Dl7nf3Me.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="splash" aria-hidden="true">
+      <div class="splash__mark">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D9BC80" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M4 20V9l8-5 8 5v11" /></svg>
+        <span>548</span>
+      </div>
+      <div class="splash__rule"></div>
+    </div>
+    <style>
+      #splash { position: fixed; inset: 0; z-index: 100; background: #4a1420; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; transition: opacity 520ms ease, visibility 520ms; }
+      #splash.splash--out { opacity: 0; visibility: hidden; }
+      .splash__mark { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #fbf8f3; font-family: Georgia, 'Times New Roman', serif; font-size: 58px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; animation: splash-in 720ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+      .splash__rule { width: 64px; height: 1px; background: linear-gradient(90deg, transparent, #d9bc80, transparent); animation: splash-in 900ms 140ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+      @keyframes splash-in { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }
+      @media (prefers-reduced-motion: reduce) { .splash__mark, .splash__rule { animation: none; } #splash { transition: none; } }
+    </style>
+  </body>
+</html>
