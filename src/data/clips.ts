@@ -8,8 +8,8 @@ export const CLIPS: Record<ClipName, boolean> = {
   'services-header': true,
   'more-header': true,
   about: true,
-  'step-contact': false,
-  'step-clarify': false,
+  'step-contact': true,
+  'step-clarify': true,
   'step-quote': false,
   'step-done': false,
 };
