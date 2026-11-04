@@ -230,7 +230,7 @@ ul {
 .screen {
   min-height: 100dvh;
   padding-bottom: calc(var(--tabbar-h) + var(--sab) + 24px);
-  animation: screen-in var(--dur) var(--ease) both;
+  animation: screen-in var(--dur) var(--ease);
 }
 .screen--flow {
   padding-bottom: 0;
@@ -857,12 +857,17 @@ ul {
   border-bottom-left-radius: var(--r-xl);
   border-bottom-right-radius: var(--r-xl);
 }
-.svc-hero img {
+.svc-hero > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 40%;
   transform: scale(1.04);
+}
+.svc-hero .ambient,
+.svc-hero .living {
+  transform: translateY(calc(var(--py, 0) * 1px)) scale(calc(1.02 + var(--pz, 0)));
+  will-change: transform;
 }
 .svc-hero__bar {
   position: absolute;
@@ -1052,7 +1057,7 @@ ul {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--fg-subtle);
@@ -2670,7 +2675,7 @@ select.input {
   position: fixed;
   left: var(--gutter);
   right: var(--gutter);
-  bottom: calc(var(--tabbar-h) + var(--sab) + 12px);
+  top: calc(var(--sat) + 10px);
   z-index: 40;
   display: grid;
   grid-template-columns: 44px 1fr 36px;
@@ -2686,7 +2691,7 @@ select.input {
 @keyframes banner-in {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(-14px);
   }
   to {
     opacity: 1;
@@ -2738,5 +2743,63 @@ select.input {
   .install-banner {
     max-width: 440px;
     margin: 0 auto;
+  }
+}
+
+/* ---------- route transitions ---------- */
+/* Deeper screens slide in from the right, "back" from the left, tabs rise softly.
+   The transform sits on the screen's children, never on the screen itself: a transformed
+   screen would become the containing block of its fixed children (sticky CTA, flow footer). */
+.route {
+  overflow-x: clip;
+}
+.route--push > .screen > :not(.sticky-cta):not(.flow__foot) {
+  animation: route-push 300ms var(--ease);
+}
+.route--pop > .screen > :not(.sticky-cta):not(.flow__foot) {
+  animation: route-pop 260ms var(--ease);
+}
+.route--tab > .screen > :not(.sticky-cta):not(.flow__foot) {
+  animation: route-tab 260ms var(--ease);
+}
+/* coming back: the list is where you left it, nothing re-enters */
+.route--pop .stagger > *,
+.route--pop .bclip {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+.route--pop .bclip__sweep {
+  animation: none;
+}
+@keyframes route-push {
+  from {
+    transform: translateX(32px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes route-pop {
+  from {
+    transform: translateX(-24px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes route-tab {
+  from {
+    transform: translateY(6px);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route--push > .screen > *,
+  .route--pop > .screen > *,
+  .route--tab > .screen > * {
+    animation: none;
   }
 }

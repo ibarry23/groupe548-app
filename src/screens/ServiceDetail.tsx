@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useApp } from '../lib/store';
 import { byId, SERVICES, type ServiceId } from '../data/services';
@@ -13,12 +14,33 @@ export function ServiceDetail() {
   const { t, lang } = useApp();
   const nav = useNavigate();
   const svc = SERVICES.find((s) => s.id === id);
+  const heroRef = useRef<HTMLDivElement>(null);
+  // Scroll-linked hero: the media drifts and zooms slightly as the page scrolls away,
+  // the zoom always growing faster than the drift so no edge is ever exposed.
+  useEffect(() => {
+    const el = heroRef.current;
+    if (!el || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const y = Math.min(window.scrollY, 340);
+        el.style.setProperty('--py', (y * 0.08).toFixed(1));
+        el.style.setProperty('--pz', (y * 0.0006).toFixed(3));
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [id]);
   if (!svc) return <Navigate to="/services" replace />;
   const back = () => (window.history.length > 1 ? nav(-1) : nav('/services'));
 
   return (
     <main className="screen">
-      <div className={`svc-hero ${svc.photo ? 'svc-hero--photo' : svc.image ? '' : 'svc-hero--ico'}`}>
+      <div ref={heroRef} className={`svc-hero ${svc.photo ? 'svc-hero--photo' : svc.image ? '' : 'svc-hero--ico'}`}>
         {svc.clip ? (
           <AmbientVideo src={`${import.meta.env.BASE_URL}video/${svc.id}.mp4`} poster={`${import.meta.env.BASE_URL}img/photos/${svc.id}-poster.jpg`} className="ambient--clip" />
         ) : svc.photo ? (

@@ -195,3 +195,14 @@ Screenshots: `docs/screenshots/` (file names describe screen, language and width
 - macOS with Xcode for the iOS build and an Apple Developer account; Android Studio and a Google Play account.
 - Store listings in FR and EN, privacy policy URL (the app stores data only on device; nothing is collected until "Send").
 - Hosting for the PWA/web build (any static host; `dist/` with `base: './'`).
+
+## Pass 10 — Navigation fluidity and design polish
+
+- **Directional route transitions.** Deeper screens slide in from the right (push), going back slides from the left (pop), tab switches rise softly. The transform lives on the screen's children, never the screen itself, so fixed elements (sticky CTA, quote footer, sheets) are never caught inside a transformed ancestor. `overflow-x: clip` on the route stage keeps the page from scrolling sideways mid-transition; reduced-motion disables it.
+- **No re-entrance on back.** Coming back to a list restores the scroll position and shows the list as it was: staggered rises, clip reveals and brass sweeps are suppressed on `pop`.
+- **Scroll-linked service hero.** The hero clip drifts and zooms very slightly as the page scrolls away (drift 8 %, zoom up to 1.22) — the zoom always outruns the drift so no edge is exposed. Off under reduced motion.
+- **Tab bar haptics** on native builds (light impact on tab change).
+- **Install banner** now sits at the top of the screen so it never covers a sticky CTA or the quote footer.
+- Tab labels nudged to 0.7 rem for legibility.
+
+Verified in the pane at 375×812: push/pop/tab classes applied, quote footer at viewport bottom, sticky CTA in place, no horizontal overflow, scroll restored on back (660 px), no console errors. Deployed to GitHub Pages.

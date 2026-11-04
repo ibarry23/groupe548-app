@@ -3,6 +3,7 @@ import { HashRouter, Navigate, NavLink, Route, Routes, useLocation, useNavigatio
 import { AppProvider, useApp } from '../lib/store';
 import { Icon, type IconName } from '../components/Icons';
 import { Button, OfflineBar, ToastHost } from '../components/ui';
+import { haptic } from '../lib/format';
 import { Home } from '../screens/Home';
 import { Services } from '../screens/Services';
 import { ServiceDetail } from '../screens/ServiceDetail';
@@ -44,7 +45,7 @@ function TabBar() {
   return (
     <nav className="tabbar" aria-label="Navigation">
       {tabs.map((tab) => (
-        <NavLink key={tab.to} to={tab.to} end={tab.to === '/'} className="tab">
+        <NavLink key={tab.to} to={tab.to} end={tab.to === '/'} className="tab" onClick={() => haptic('light')}>
           {({ isActive }) => (
             <>
               <span className="tab__iconwrap">
@@ -154,12 +155,16 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
   }
 }
 
-function Shell() {
+const TAB_ROOTS = new Set(['/', '/services', '/requests', '/more']);
+
+/** Screens slide in from the right when going deeper, from the left when coming back, and crossfade between tabs. */
+function RouteStage() {
+  const location = useLocation();
+  const navType = useNavigationType();
+  const kind = navType === 'POP' ? 'pop' : TAB_ROOTS.has(location.pathname) ? 'tab' : 'push';
   return (
-    <>
-      <ScrollManager />
-      <OfflineBar />
-      <Routes>
+    <div key={location.key} className={`route route--${kind}`}>
+      <Routes location={location}>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
         <Route path="/services/:id" element={<ServiceDetail />} />
@@ -173,6 +178,16 @@ function Shell() {
         <Route path="/more/about" element={<About />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+    </div>
+  );
+}
+
+function Shell() {
+  return (
+    <>
+      <ScrollManager />
+      <OfflineBar />
+      <RouteStage />
       <TabBar />
       <InstallBanner />
       <ToastHost />
