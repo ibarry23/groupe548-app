@@ -2906,12 +2906,143 @@ select.input {
   stroke: rgba(251, 248, 243, 0.07);
   stroke-width: 0.6;
 }
-.stage__road {
+.stage__curb {
   fill: none;
-  stroke: rgba(251, 248, 243, 0.1);
-  stroke-width: 15;
+  stroke: rgba(251, 248, 243, 0.2);
+  stroke-width: 17;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+.stage__road {
+  fill: none;
+  stroke: #2a0d14;
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.stage__apron {
+  fill: rgba(251, 248, 243, 0.05);
+}
+.stage__lawn {
+  fill: #2f3a2c;
+  opacity: 0.42;
+}
+.stage__walk {
+  fill: rgba(251, 248, 243, 0.09);
+}
+.ao {
+  fill: #000;
+  opacity: 0.35;
+}
+.bevel {
+  fill: rgba(255, 255, 255, 0.45);
+}
+.glint {
+  fill: rgba(255, 255, 255, 0.22);
+}
+.brass__top,
+.brass__side {
+  fill: var(--brass-500);
+}
+.brass__front {
+  fill: var(--brass-700);
+}
+.ac__top {
+  fill: #f6f0e6;
+}
+.ac__side {
+  fill: #e4dac8;
+}
+.ac__front {
+  fill: #cdbfa6;
+}
+.mirror__top {
+  fill: #f6f0e6;
+}
+.mirror__side {
+  fill: #e4dac8;
+}
+.mirror__front {
+  fill: #cdbfa6;
+}
+.truck__seam2 {
+  fill: rgba(60, 30, 20, 0.12);
+}
+.truck__marker {
+  fill: #ffb347;
+}
+.truck__grille {
+  fill: rgba(40, 20, 16, 0.55);
+}
+.truck__arch {
+  fill: #3b2a2e;
+}
+.truck__puff {
+  fill: #fbf8f3;
+}
+.bld__slat {
+  fill: rgba(0, 0, 0, 0.18);
+}
+.bld__frame {
+  fill: rgba(90, 26, 36, 0.7);
+}
+.bld__knob {
+  fill: var(--brass-300);
+}
+.step__top {
+  fill: #e9e1d2;
+}
+.step__side {
+  fill: #d8cdb8;
+}
+.step__front {
+  fill: #c3b59c;
+}
+.roof__shingle {
+  fill: rgba(0, 0, 0, 0.14);
+}
+.roof__ridge {
+  fill: #b04a5b;
+}
+.chimney__top {
+  fill: #7a2634;
+}
+.chimney__side {
+  fill: #6b2230;
+}
+.chimney__front {
+  fill: #56182a;
+}
+.bush {
+  fill: #27331f;
+}
+.bush__top {
+  fill: #35472c;
+}
+.win__glow {
+  fill: #ffe3a0;
+  opacity: 0.55;
+}
+.stage__house--busy .win__glow {
+  animation: window-glow 1.6s ease-in-out infinite;
+}
+.pot__top {
+  fill: #c0674f;
+}
+.pot__side {
+  fill: #a65242;
+}
+.pot__front {
+  fill: #8a4034;
+}
+.leaf {
+  fill: #2d5a3a;
+}
+.leaf--lit {
+  fill: #3f7a4e;
+}
+.mover__hand {
+  fill: #e6c19c;
 }
 .stage__lane {
   fill: none;
@@ -3023,9 +3154,168 @@ select.input {
 .truck__text {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 5.6px;
+  font-size: 5.4px;
   fill: #5a1a24;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
+}
+.truck__word {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1.9px;
+  letter-spacing: 0.22em;
+  fill: #5a1a24;
+}
+.truck__mark {
+  fill: none;
+  stroke: var(--brass-500);
+  stroke-width: 20;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.truck__markFront {
+  fill: none;
+  stroke: var(--brass-500);
+  stroke-width: 22;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+.truck__frame {
+  fill: none;
+  stroke: var(--brass-500);
+  stroke-width: 0.35;
+  opacity: 0.7;
+}
+.truck__seam {
+  fill: #b9ab93;
+}
+.truck__top {
+  fill: #fbf8f3;
+}
+.truck__brass2 {
+  fill: var(--brass-700);
+}
+.bld__mark {
+  fill: none;
+  stroke: #5a1a24;
+  stroke-width: 22;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+/* trees, lamp */
+.tree__lit {
+  fill: #6a2432;
+}
+.tree__shade {
+  fill: #3a0f17;
+}
+.tree__trunk {
+  fill: #2a1014;
+}
+.tree__shadow {
+  fill: #000;
+  opacity: 0.22;
+}
+.lamp__pole {
+  stroke: rgba(251, 248, 243, 0.45);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+.lamp__bulb {
+  fill: rgba(251, 248, 243, 0.4);
+}
+.lamp__halo {
+  fill: #ffe3a0;
+  opacity: 0;
+}
+.lamp--on .lamp__bulb {
+  fill: #ffe9b0;
+}
+.lamp--on .lamp__halo {
+  opacity: 0.55;
+}
+.stage__house--lit .bld__window {
+  fill: #ffe3a0;
+  opacity: 1;
+}
+/* movers */
+.mover__shadow {
+  fill: #000;
+  opacity: 0.3;
+}
+.mover__leg {
+  fill: #2b1a1e;
+}
+.mover__leg2 {
+  fill: #1c1013;
+}
+.mover__torso {
+  fill: #6a2230;
+}
+.mover__torso2 {
+  fill: #4e1620;
+}
+.mover__torso3 {
+  fill: #7d2c3b;
+}
+.mover__belt {
+  fill: var(--brass-500);
+}
+.mover__head {
+  fill: #e6c19c;
+}
+.mover__cap {
+  fill: #5a1a24;
+}
+.box__side {
+  fill: #e9dec8;
+}
+.box__front {
+  fill: #cdbfa3;
+}
+.box__top {
+  fill: #f6efe2;
+}
+.box__tape {
+  fill: var(--brass-500);
+}
+.mover__a {
+  animation: walk-a 0.46s steps(1) infinite;
+}
+.mover__b {
+  animation: walk-b 0.46s steps(1) infinite;
+}
+@keyframes walk-a {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes walk-b {
+  0%,
+  49% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+.mover__body {
+  animation: mover-bob 0.46s ease-in-out infinite;
+}
+@keyframes mover-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -0.5px;
+  }
 }
 .truck__glass {
   stroke: rgba(251, 248, 243, 0.5);
@@ -3197,6 +3487,10 @@ select.input {
   .stage__lane,
   .stage__truck,
   .truck__bob,
+  .mover__a,
+  .mover__b,
+  .mover__body,
+  .win__glow,
   .stage__house--busy .bld__window,
   .steps__item--now .steps__dot,
   .status--live::before,
