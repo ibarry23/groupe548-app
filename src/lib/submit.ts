@@ -34,15 +34,20 @@ export interface QuoteDraft {
 
 export type RequestStatus = 'sent' | 'queued' | 'demo' | 'failed';
 
-export type CustomerStage = 'sent' | 'quoted' | 'scheduled' | 'done';
+export type CustomerStage = 'sent' | 'quoted' | 'scheduled' | 'en-route' | 'arrived' | 'in-progress' | 'done';
 
 export interface SavedRequest {
   ref: string;
   createdAt: string;
   sentAt?: string;
   status: RequestStatus;
-  /** Progress noted by the customer themselves (no backend updates this). */
+  /** Progress noted by the customer themselves, or by the team when the status feed is on. */
   stage?: CustomerStage;
+  /** True once the team's status feed has a row for this reference (docs/STATUS-FEED.md). */
+  tracked?: boolean;
+  eta?: string;
+  teamNote?: string;
+  teamUpdatedAt?: string;
   draft: Omit<QuoteDraft, 'photos' | 'step'> & { photoCount: number };
 }
 

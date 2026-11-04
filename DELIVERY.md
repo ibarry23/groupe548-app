@@ -206,3 +206,15 @@ Screenshots: `docs/screenshots/` (file names describe screen, language and width
 - Tab labels nudged to 0.7 rem for legibility.
 
 Verified in the pane at 375×812: push/pop/tab classes applied, quote footer at viewport bottom, sticky CTA in place, no horizontal overflow, scroll restored on back (660 px), no console errors. Deployed to GitHub Pages.
+
+## Pass 11 — « L’équipe est en route » (suivi en direct)
+
+- **Modèle de statut étendu** : `sent → quoted → scheduled → en-route → arrived → in-progress → done`, avec `eta`, `teamNote`, `teamUpdatedAt` et `tracked` sur chaque demande.
+- **Source de vérité sans serveur** : `src/lib/status.ts` lit `VITE_STATUS_FEED_URL` — une feuille Google Sheets publiée en CSV (ou un JSON) tenue par le répartiteur : `reference, stage, eta, note`. Vocabulaire FR/EN tolérant (« en route », « arrivée », « sur place », « en cours », « terminé »…), parseur CSV avec guillemets, correspondance par référence. Relecture toutes les 45 s quand une demande est ouverte, à chaque retour au premier plan, et à l’ouverture de l’app s’il reste une demande non terminée.
+- **Carte « Suivi en direct »** sur le détail d’une demande : route en laiton entre *Équipe 548* et *Chez vous*, camion qui respire quand c’est planifié, qui roule (tirets en mouvement, halo pulsé à la porte) quand l’équipe est en route, garé à la porte à l’arrivée, crochet vert une fois terminé. Heure d’arrivée prévue en Fraunces, mot de l’équipe, « Mis à jour il y a X min », *Actualiser*, *Joindre l’équipe*, et *Me prévenir quand l’équipe part* (notification système si acceptée). Reduced-motion respecté.
+- **Accueil** : bandeau « Votre équipe est en route · Arrivée prévue … » dès qu’une demande passe en route ; **liste** : pastille vivante.
+- Quand la feuille suit une demande, le suivi manuel du client disparaît pour cette demande ; sans feuille, la carte dit honnêtement que l’équipe appelle ou texte le jour venu.
+- **Aperçu** : `#/requests/<ref>?preview=en-route` (ou `scheduled`, `arrived`, `in-progress`, `done`) montre la carte avec des données d’exemple marquées *Aperçu*.
+- Docs : `docs/STATUS-FEED.md` (création de la feuille, publication CSV, vocabulaire, confidentialité), `docs/status-feed-template.csv`, README, `.env.example`.
+
+Vérifié dans le volet à 375×812 : analyse du CSV modèle (5 étapes reconnues), carte en-route/planifié/terminé, bandeau d’accueil, animation du camion (position mesurée en mouvement), aucune erreur console. Déployé.

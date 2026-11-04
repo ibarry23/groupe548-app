@@ -31,6 +31,10 @@ VITE_WEB3FORMS_KEY=<clé Web3Forms>
 
 Le site web actuel utilise déjà Web3Forms (sa clé publique est dans `.env.example`). L'app envoie les mêmes champs que le formulaire du site (`name`, `phone`, `email`, `city`, `service`, `description`, `date`, `language`) plus `reference` et `source=app`, donc les demandes arrivent dans la même boîte courriel, avec une référence lisible (ex. `G548-7K3Q`).
 
+## Suivi en direct (« l’équipe est en route »)
+
+Optionnel : `VITE_STATUS_FEED_URL` pointe vers une feuille Google Sheets publiée en CSV (ou un JSON) que le répartiteur tient à jour — `reference, stage, eta, note`. L’app la lit toutes les 45 s quand une demande est ouverte et montre au client le camion en route, l’heure d’arrivée prévue et un mot de l’équipe. Guide pas à pas : [docs/STATUS-FEED.md](docs/STATUS-FEED.md). Sans feuille, la carte explique que l’équipe appelle ou texte le jour venu.
+
 ## Hébergement actuel
 
 - Code source : https://github.com/ibarry23/groupe548-app (public, branche `main`).

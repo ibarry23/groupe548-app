@@ -12,7 +12,8 @@ const img = (name: string) => `${import.meta.env.BASE_URL}img/${name}.webp`;
 const TRUST_ICONS: IconName[] = ['globe', 'clock', 'receipt', 'leaf', 'sparkles', 'map-pin'];
 
 export function Home() {
-  const { t, lang, setLang, hasDraft, draft } = useApp();
+  const { t, lang, setLang, hasDraft, draft, requests } = useApp();
+  const liveReq = requests.find((r) => r.stage === 'en-route' || r.stage === 'arrived' || r.stage === 'in-progress');
   const nav = useNavigate();
   const draftLabel = draft.services.map((s) => byId(s).name[lang]).join(' + ');
   const heroRef = useRef<HTMLElement>(null);
@@ -71,6 +72,21 @@ export function Home() {
           {t.home.note}
         </p>
       </section>
+
+      {liveReq && (
+        <section className="container" style={{ paddingTop: 16 }}>
+          <button type="button" className="svc-row live-row" onClick={() => nav(`/requests/${liveReq.ref}`)} style={{ gridTemplateColumns: '44px 1fr 20px' }}>
+            <span className="svc-row__ico live-row__ico" style={{ width: 44, height: 44 }}>
+              <Icon name="truck" size={22} />
+            </span>
+            <span>
+              <span className="svc-row__name">{liveReq.stage === 'en-route' ? t.requests.homeLive : t.requests.homeArrived}</span>
+              <span className="svc-row__tag">{liveReq.stage === 'en-route' && liveReq.eta ? t.requests.eta(liveReq.eta) : t.requests.stages[liveReq.stage!]}</span>
+            </span>
+            <Icon name="chevron-right" size={20} className="ico chev" />
+          </button>
+        </section>
+      )}
 
       {hasDraft && (
         <section className="container" style={{ paddingTop: 16 }}>

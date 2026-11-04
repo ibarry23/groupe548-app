@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { dict, type Dict, type Lang } from '../i18n';
 import { emptyDraft, submitRequest, SUBMIT_MODE, type QuoteDraft, type SavedRequest } from './submit';
+import { fetchTeamUpdates, hasStatusFeed, notify } from './status';
 
 const LS = { lang: 'g548.lang', draft: 'g548.draft', requests: 'g548.requests' } as const;
 
@@ -39,6 +40,8 @@ interface AppState {
   updateRequest: (ref: string, patch: Partial<SavedRequest>) => void;
   removeRequest: (ref: string) => void;
   resend: (ref: string) => Promise<void>;
+  /** Pulls the team's status feed and applies it to saved requests; false when there is no feed or it failed. */
+  syncStatus: () => Promise<boolean>;
   online: boolean;
   toasts: Toast[];
   toast: (msg: string, kind?: Toast['kind']) => void;
@@ -88,6 +91,44 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const addRequest = useCallback((r: SavedRequest) => setRequests((rs) => [r, ...rs.filter((x) => x.ref !== r.ref)]), []);
   const updateRequest = useCallback((ref: string, patch: Partial<SavedRequest>) => setRequests((rs) => rs.map((r) => (r.ref === ref ? { ...r, ...patch } : r))), []);
   const removeRequest = useCallback((ref: string) => setRequests((rs) => rs.filter((r) => r.ref !== ref)), []);
+  const requestsRef = useRef(requests);
+  requestsRef.current = requests;
+
+  const syncStatus = useCallback(async () => {
+    if (!hasStatusFeed() || !navigator.onLine) return false;
+    let updates: Awaited<ReturnType<typeof fetchTeamUpdates>>;
+    try {
+      updates = await fetchTeamUpdates();
+    } catch {
+      return false;
+    }
+    const now = new Date().toISOString();
+    const tr = dict[lang].requests;
+    const justLeft = requestsRef.current.find((r) => updates.get(r.ref.toUpperCase())?.stage === 'en-route' && r.stage !== 'en-route');
+    setRequests((rs) =>
+      rs.map((r) => {
+        const u = updates.get(r.ref.toUpperCase());
+        return u ? { ...r, tracked: true, stage: u.stage, eta: u.eta, teamNote: u.note, teamUpdatedAt: now } : r;
+      }),
+    );
+    if (justLeft) {
+      toast(tr.liveEnRoute, 'success');
+      void notify(tr.notifyTitle, justLeft.eta ? `${tr.liveEnRoute} ${tr.eta(justLeft.eta)}` : tr.liveEnRoute, `${import.meta.env.BASE_URL}icon-192.png`);
+    }
+    return true;
+  }, [lang, toast]);
+
+  // Keep the team feed fresh whenever the app comes to the front with an open request.
+  useEffect(() => {
+    if (!hasStatusFeed()) return;
+    const run = () => {
+      if (document.hidden) return;
+      if (requestsRef.current.some((r) => (r.status === 'sent' || r.status === 'demo') && r.stage !== 'done')) void syncStatus();
+    };
+    run();
+    document.addEventListener('visibilitychange', run);
+    return () => document.removeEventListener('visibilitychange', run);
+  }, [syncStatus]);
 
   const inFlight = useRef(new Set<string>());
   const resend = useCallback(
@@ -117,8 +158,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   // Connectivity: flush queued requests when the connection returns.
   const resendRef = useRef(resend);
   resendRef.current = resend;
-  const requestsRef = useRef(requests);
-  requestsRef.current = requests;
   useEffect(() => {
     const on = () => {
       setOnline(true);
@@ -136,8 +175,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const hasDraft = draft.services.length > 0 || draft.name.trim().length > 0 || draft.phone.trim().length > 0;
 
   const value = useMemo<AppState>(
-    () => ({ lang, setLang, t: dict[lang], draft, setDraft, resetDraft, hasDraft, requests, addRequest, updateRequest, removeRequest, resend, online, toasts, toast }),
-    [lang, setLang, draft, setDraft, resetDraft, hasDraft, requests, addRequest, updateRequest, removeRequest, resend, online, toasts, toast],
+    () => ({ lang, setLang, t: dict[lang], draft, setDraft, resetDraft, hasDraft, requests, addRequest, updateRequest, removeRequest, resend, syncStatus, online, toasts, toast }),
+    [lang, setLang, draft, setDraft, resetDraft, hasDraft, requests, addRequest, updateRequest, removeRequest, resend, syncStatus, online, toasts, toast],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
