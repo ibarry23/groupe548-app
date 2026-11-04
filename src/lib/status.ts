@@ -1,4 +1,5 @@
 import type { CustomerStage } from './submit';
+import type { Lang } from '../i18n';
 
 /**
  * Team status feed: a published Google Sheet (CSV) or a JSON file the team keeps up to
@@ -152,4 +153,40 @@ export async function notify(title: string, body: string, icon: string) {
   } catch {
     /* notifications unavailable on this platform */
   }
+}
+
+export interface EtaInfo {
+  display: string;
+  /** Minutes from now when the text named a clock time; undefined for free text. */
+  minutes?: number;
+}
+
+/** Reads the dispatcher's ETA text: "14 h 30", "14:30", "2:30 pm", "vers 14 h", "15 min", or anything else as-is. */
+export function parseEta(text: string | undefined, now: number, lang: Lang): EtaInfo | null {
+  if (!text) return null;
+  const raw = text.trim();
+  const m = /(\d{1,2})\s*(?:h|:|\.)\s*(\d{2})?\s*(a\.?m\.?|p\.?m\.?)?/i.exec(raw);
+  if (m) {
+    let h = Number(m[1]);
+    const min = Number(m[2] ?? '0');
+    const ap = m[3]?.toLowerCase().replace(/\./g, '');
+    if (h <= 24 && min < 60) {
+      if (ap === 'pm' && h < 12) h += 12;
+      if (ap === 'am' && h === 12) h = 0;
+      const d = new Date(now);
+      d.setHours(h, min, 0, 0);
+      return { display: timeOf(d.toISOString(), lang), minutes: Math.round((d.getTime() - now) / 60000) };
+    }
+  }
+  const rel = /(\d{1,3})\s*min/i.exec(raw);
+  if (rel) return { display: `~${rel[1]} min` };
+  return { display: raw };
+}
+
+/** "14 h 32" in French, "2:32 p.m." in English; empty when there is no date. */
+export function timeOf(iso: string | undefined, lang: Lang): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleTimeString(lang === 'fr' ? 'fr-CA' : 'en-CA', { hour: 'numeric', minute: '2-digit' });
 }

@@ -218,3 +218,12 @@ Verified in the pane at 375×812: push/pop/tab classes applied, quote footer at 
 - Docs : `docs/STATUS-FEED.md` (création de la feuille, publication CSV, vocabulaire, confidentialité), `docs/status-feed-template.csv`, README, `.env.example`.
 
 Vérifié dans le volet à 375×812 : analyse du CSV modèle (5 étapes reconnues), carte en-route/planifié/terminé, bandeau d’accueil, animation du camion (position mesurée en mouvement), aucune erreur console. Déployé.
+
+## Pass 12 — Feuille « Suivi 548 » branchée + carte « Suivi en direct » cinématique
+
+- **Feuille Google « Suivi 548 »** créée dans le compte Google de l’entreprise, publiée en CSV (CORS vérifié : `Access-Control-Allow-Origin: *`), branchée via `VITE_STATUS_FEED_URL`. Test de bout en bout sur le site en ligne : une ligne `en route · vers 14 h 30` dans la feuille fait apparaître la carte « Mis à jour par l’équipe » dans l’app.
+- **Nouvelle carte** (`src/components/LiveCard.tsx`) : panneau bordeaux à liseré laiton (comme les clips de marque), route courbe en SVG, camion qui roule le long de la route (SMIL `animateMotion`, rotation suivant la pente, easing, pause à la porte) en traçant une traînée laiton lumineuse (`stroke-dashoffset` synchronisé + flou), tirets qui défilent, ondes concentriques à la porte, balayage lumineux lent sur le panneau ; parcours en cinq étapes (Planifié · En route · Arrivée · En cours · Terminé) avec l’étape courante qui respire.
+- **Heure d’arrivée** en Fraunces 2.35 rem avec compte à rebours (« dans environ 25 min », « d’une minute à l’autre »), mis à jour toutes les 30 s ; le texte du répartiteur est compris sous les formes « 14 h 30 », « 14:30 », « 2:30 pm », « vers 14 h », « 15 min », sinon affiché tel quel. Planifié : date du service ; arrivée / en cours : heure constatée ; terminé : « Merci! ».
+- Reduced-motion : aucune animation SMIL ni CSS, camion placé au milieu de la route.
+
+Vérifié dans le volet (375×812) : les cinq états (classe, position du camion, traînée, ondes, libellés, boutons), camion en mouvement mesuré le long de la courbe, aucune erreur console. Déployé.

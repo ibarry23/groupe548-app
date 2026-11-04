@@ -2823,235 +2823,304 @@ select.input {
     transform: scale(0.7);
   }
 }
+/* the panel: a bordeaux stage with a brass hairline, like the branded clips */
 .live {
   position: relative;
   overflow: hidden;
+  padding: 18px 18px 16px;
+  color: var(--on-brand);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(217, 188, 128, 0.16) 0%, transparent 55%),
+    linear-gradient(165deg, var(--bdx-700) 0%, var(--bdx-900) 100%);
+  border: 1px solid rgba(217, 188, 128, 0.35);
+  box-shadow: var(--shadow-lg);
+  isolation: isolate;
 }
-.live__msg {
-  margin-top: 6px;
-  font-weight: 600;
+.live__frame {
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(217, 188, 128, 0.4);
+  border-radius: calc(var(--r-lg, 20px) - 6px);
+  pointer-events: none;
 }
-.live__eta {
-  margin-top: 4px;
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  line-height: 1.2;
-  color: var(--brass-700);
+.live__sweep {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  width: 36%;
+  left: -40%;
+  background: linear-gradient(100deg, transparent 0%, rgba(217, 188, 128, 0.14) 50%, transparent 100%);
+  pointer-events: none;
+  animation: live-sweep 7.5s var(--ease) infinite;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .live__eta {
-    color: var(--brass-300);
+@keyframes live-sweep {
+  0%,
+  8% {
+    left: -40%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    left: 110%;
+    opacity: 1;
+  }
+  81%,
+  100% {
+    left: 110%;
+    opacity: 0;
   }
 }
-:root[data-theme='dark'] .live__eta {
+.live__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.live__head .h3 {
+  color: var(--on-brand);
+}
+.live .status--live {
+  background: rgba(217, 188, 128, 0.16);
   color: var(--brass-300);
 }
-.live__note {
-  margin-top: 6px;
+.live .status--demo {
+  background: rgba(251, 248, 243, 0.12);
+  color: var(--on-brand);
 }
-.live__meta {
-  margin-top: 8px;
-  color: var(--fg-subtle);
+.live .link {
+  color: var(--brass-300);
+  text-decoration-color: rgba(217, 188, 128, 0.5);
 }
-.route-map {
+
+/* the road */
+.road {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 10px 0 2px;
+  overflow: visible;
+}
+.road__base {
+  fill: none;
+  stroke: rgba(251, 248, 243, 0.28);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 3 7;
+}
+.live--en-route .road__base {
+  animation: road-flow 0.9s linear infinite;
+}
+@keyframes road-flow {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+.road__trail {
+  fill: none;
+  stroke: var(--brass-300);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.road__depot circle {
+  fill: var(--brass-300);
+  stroke: rgba(59, 15, 24, 0.9);
+  stroke-width: 3;
+}
+.road__label {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  fill: rgba(251, 248, 243, 0.78);
+}
+.road__ripple {
+  fill: none;
+  stroke: var(--brass-300);
+  stroke-width: 1.5;
+}
+.road__house {
+  fill: var(--bdx-900);
+  stroke: var(--brass-300);
+  stroke-width: 1.5;
+}
+.road__glyph {
+  fill: none;
+  stroke: var(--brass-300);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.live--in-progress .road__house {
+  fill: var(--brass-500);
+}
+.live--in-progress .road__glyph {
+  stroke: var(--bdx-900);
+}
+.live--done .road__house {
+  fill: var(--brass-300);
+  stroke: var(--brass-300);
+}
+.live--done .road__glyph {
+  stroke: var(--bdx-900);
+}
+.road__truckbg {
+  fill: var(--on-brand);
+  stroke: var(--brass-300);
+  stroke-width: 1.5;
+}
+.road__truckico {
+  fill: none;
+  stroke: var(--bdx-700);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.live--scheduled .road__truck {
+  animation: truck-idle 3.2s ease-in-out infinite;
+}
+@keyframes truck-idle {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -3px;
+  }
+}
+.live--done .road__truck {
+  opacity: 0.55;
+}
+
+/* the five steps */
+.steps {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 10px;
-  margin: 18px 0 14px;
+  grid-template-columns: repeat(5, 1fr);
+  position: relative;
 }
-.route-map__node {
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 5px;
+  height: 1px;
+  background: rgba(251, 248, 243, 0.2);
+}
+.steps__item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  min-width: 56px;
-}
-.route-map__dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--bdx-700);
-  box-shadow: 0 0 0 4px var(--bdx-50);
-}
-.route-map__dot--you {
-  width: 30px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  background: var(--surface);
-  color: var(--bdx-700);
-  border: 1.5px solid var(--brass-500);
-  box-shadow: 0 0 0 0 var(--brass-300);
-}
-.route-map__label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--fg-muted);
-  max-width: 96px;
-  text-align: center;
-  line-height: 1.2;
-}
-.route-map__line {
   position: relative;
-  height: 44px;
 }
-.route-map__line::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 2px;
-  background: var(--line);
-  border-radius: 2px;
+.steps__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--bdx-900);
+  border: 1.5px solid rgba(251, 248, 243, 0.35);
 }
-.route-map__dash {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 2px;
-  background: repeating-linear-gradient(90deg, var(--brass-500) 0 10px, transparent 10px 18px);
-  opacity: 0;
+.steps__item--done .steps__dot {
+  background: var(--brass-300);
+  border-color: var(--brass-300);
 }
-.route-map__van {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translate(-40%, -62%);
-  width: 38px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--surface);
-  color: var(--bdx-700);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-sm);
+.steps__item--now .steps__dot {
+  background: var(--brass-300);
+  border-color: var(--brass-300);
+  box-shadow: 0 0 0 4px rgba(217, 188, 128, 0.22);
+  animation: step-glow 2s ease-in-out infinite;
 }
-/* scheduled: parked at the depot, breathing */
-.live--scheduled .route-map__van {
-  animation: van-idle 3.2s ease-in-out infinite;
-}
-@keyframes van-idle {
+@keyframes step-glow {
   0%,
   100% {
-    transform: translate(-40%, -62%);
+    box-shadow: 0 0 0 3px rgba(217, 188, 128, 0.22);
   }
   50% {
-    transform: translate(-40%, -68%);
+    box-shadow: 0 0 0 7px rgba(217, 188, 128, 0.08);
   }
 }
-/* en route: dashes flow and the truck drives to the door */
-.live--en-route .route-map__dash {
-  opacity: 1;
-  animation: dash-flow 1.1s linear infinite;
+.steps__label {
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(251, 248, 243, 0.5);
+  text-align: center;
+  line-height: 1.1;
 }
-@keyframes dash-flow {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 18px 0;
-  }
+.steps__item--done .steps__label {
+  color: rgba(251, 248, 243, 0.78);
 }
-.live--en-route .route-map__van {
-  animation: van-go 7s cubic-bezier(0.45, 0.05, 0.3, 1) infinite;
+.steps__item--now .steps__label {
+  color: var(--brass-300);
 }
-@keyframes van-go {
-  0% {
-    left: 0;
-    transform: translate(-40%, -62%);
-    opacity: 0;
-  }
-  8% {
-    opacity: 1;
-  }
-  45%,
-  60% {
-    left: 100%;
-    transform: translate(-60%, -62%);
-    opacity: 1;
-  }
-  72% {
-    left: 100%;
-    transform: translate(-60%, -62%);
-    opacity: 0;
-  }
-  80% {
-    left: 0;
-    transform: translate(-40%, -62%);
-    opacity: 0;
-  }
-  100% {
-    left: 0;
-    transform: translate(-40%, -62%);
-    opacity: 0;
-  }
+
+/* the headline */
+.live__headline {
+  margin-top: 18px;
 }
-.live--en-route .route-map__dot--you,
-.live--arrived .route-map__dot--you,
-.live--in-progress .route-map__dot--you {
-  animation: you-pulse 2.2s ease-out infinite;
+.live__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass-300);
 }
-@keyframes you-pulse {
-  from {
-    box-shadow: 0 0 0 0 var(--brass-300);
-  }
-  to {
-    box-shadow: 0 0 0 14px rgba(217, 188, 128, 0);
-  }
-}
-/* arrived, in progress, done: parked at the door */
-.live--arrived .route-map__van,
-.live--in-progress .route-map__van,
-.live--done .route-map__van {
-  left: 100%;
-  transform: translate(-60%, -62%);
-}
-.live--arrived .route-map__dash,
-.live--in-progress .route-map__dash,
-.live--done .route-map__dash {
-  opacity: 1;
-  background: var(--brass-500);
-}
-.live--in-progress .route-map__dot--you {
-  background: var(--bdx-700);
+.live__big {
+  margin-top: 2px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 2.35rem;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
   color: var(--on-brand);
+  font-variant-numeric: lining-nums;
 }
-.live--done .route-map__dot--you {
-  background: var(--success);
-  color: #fff;
-  border-color: var(--success);
-  animation: none;
+.live__sub {
+  margin-top: 4px;
+  font-size: 1rem;
+  color: var(--brass-300);
 }
-.live--done .route-map__van {
-  opacity: 0.55;
+.live__note {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: rgba(251, 248, 243, 0.78);
+}
+.live__meta {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: rgba(251, 248, 243, 0.6);
+}
+.live__actions {
+  margin-top: 14px;
 }
 .live-row {
   border-color: var(--brass-500);
-  background: linear-gradient(90deg, var(--brass-50, var(--surface)), var(--surface));
+  background: linear-gradient(90deg, var(--brass-100), var(--surface));
 }
 .live-row__ico {
   background: var(--bdx-700);
   color: var(--on-brand);
-  animation: van-idle 3.2s ease-in-out infinite;
+  animation: truck-idle 3.2s ease-in-out infinite;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .live-row {
+    background: linear-gradient(90deg, rgba(217, 188, 128, 0.12), var(--surface));
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .route-map__van,
-  .route-map__dash,
-  .route-map__dot--you,
+  .live__sweep,
+  .road__base,
+  .road__truck,
+  .steps__item--now .steps__dot,
   .status--live::before,
   .live-row__ico {
     animation: none !important;
-  }
-  .live--en-route .route-map__van {
-    left: 50%;
-    transform: translate(-50%, -62%);
-  }
-  .live--en-route .route-map__dash {
-    opacity: 1;
   }
 }

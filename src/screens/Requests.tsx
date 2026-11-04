@@ -9,7 +9,8 @@ import { Icon } from '../components/Icons';
 import { Button, CallLink, Chip, Empty, Sheet, StatusPill, TopBar } from '../components/ui';
 import { downloadIcs, mailtoCopy, shareText } from '../lib/format';
 import { AmbientClip } from '../components/Media';
-import { LIVE_STAGES, STAGE_ORDER, hasStatusFeed, minutesSince } from '../lib/status';
+import { LIVE_STAGES, STAGE_ORDER, hasStatusFeed, timeOf } from '../lib/status';
+import { LiveCard } from '../components/LiveCard';
 
 const titleOf = (r: SavedRequest, lang: 'fr' | 'en') => r.draft.services.map((s) => byId(s).name[lang]).join(' + ');
 
@@ -112,7 +113,7 @@ export function RequestDetail() {
         ...r,
         stage: previewStage,
         tracked: true,
-        eta: previewStage === 'en-route' ? (lang === 'fr' ? 'vers 14 h 30' : 'around 2:30 pm') : undefined,
+        eta: previewStage === 'en-route' ? timeOf(new Date(Date.now() + 25 * 60000).toISOString(), lang) : undefined,
         teamNote: previewStage === 'en-route' || previewStage === 'arrived' ? (lang === 'fr' ? 'Équipe de 2, camion 16 pi.' : '2-person crew, 16 ft truck.') : undefined,
         teamUpdatedAt: new Date().toISOString(),
       }
@@ -297,79 +298,3 @@ export function RequestDetail() {
 }
 
 
-/**
- * Live tracking: a brass route between the team and the customer, the truck moving along it
- * while the team is on the way, then parked at the door. Data comes from the team's status
- * feed; without one the card explains how the team gets in touch on the day.
- */
-function LiveCard({ r, preview, onRefresh, refreshing }: { r: SavedRequest; preview: boolean; onRefresh: () => void; refreshing: boolean }) {
-  const { t, lang, toast } = useApp();
-  const stage = r.stage ?? 'scheduled';
-  const [perm, setPerm] = useState<string>(() => (typeof Notification === 'undefined' ? 'unsupported' : Notification.permission));
-  const askNotify = async () => {
-    const p = await Notification.requestPermission();
-    setPerm(p);
-    if (p === 'granted') toast(t.requests.notifyOn, 'success');
-  };
-  const live = hasStatusFeed() || preview;
-  const where = cityLabel(r.draft, lang) || t.requests.liveYou;
-  return (
-    <section className={`card card--pad live live--${stage}`} aria-live="polite">
-      <div className="row" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-        <h2 className="h3">{t.requests.liveTitle}</h2>
-        {preview ? <span className="status status--demo">{t.requests.preview}</span> : r.tracked ? <span className="status status--live">{t.requests.trackedBy}</span> : null}
-      </div>
-
-      <div className="route-map" aria-hidden="true">
-        <span className="route-map__node route-map__node--from">
-          <span className="route-map__dot" />
-          <span className="route-map__label">{t.requests.liveTeam}</span>
-        </span>
-        <span className="route-map__line">
-          <span className="route-map__dash" />
-          <span className="route-map__van">
-            <Icon name="truck" size={22} strokeWidth={1.6} />
-          </span>
-        </span>
-        <span className="route-map__node route-map__node--to">
-          <span className="route-map__dot route-map__dot--you">
-            <Icon name={stage === 'done' ? 'check' : 'home'} size={13} strokeWidth={2.2} />
-          </span>
-          <span className="route-map__label">{where}</span>
-        </span>
-      </div>
-
-      <p className="body live__msg">{t.requests.liveBy[stage]}</p>
-      {r.eta && (stage === 'en-route' || stage === 'scheduled') && <p className="live__eta">{t.requests.eta(r.eta)}</p>}
-      {r.teamNote && <p className="small live__note">{r.teamNote}</p>}
-      {live ? (
-        <p className="small live__meta">
-          {t.requests.updatedAgo(minutesSince(r.teamUpdatedAt))}
-          {!preview && (
-            <>
-              {' · '}
-              <button type="button" className="link" onClick={onRefresh} disabled={refreshing}>
-                {t.requests.refresh}
-              </button>
-            </>
-          )}
-        </p>
-      ) : (
-        <p className="small live__meta">{t.requests.noFeed}</p>
-      )}
-
-      <div className="btn-row" style={{ marginTop: 14 }}>
-        {live && stage === 'scheduled' && perm === 'default' && (
-          <Button variant="secondary" size="sm" icon="alert" onClick={askNotify}>
-            {t.requests.notify}
-          </Button>
-        )}
-        {(stage === 'en-route' || stage === 'arrived' || stage === 'in-progress') && (
-          <CallLink tel={PHONES[0].tel} className="btn btn--secondary btn--sm">
-            {t.requests.callTeam}
-          </CallLink>
-        )}
-      </div>
-    </section>
-  );
-}
