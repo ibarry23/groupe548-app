@@ -227,3 +227,8 @@ Vérifié dans le volet à 375×812 : analyse du CSV modèle (5 étapes reconnue
 - Reduced-motion : aucune animation SMIL ni CSS, camion placé au milieu de la route.
 
 Vérifié dans le volet (375×812) : les cinq états (classe, position du camion, traînée, ondes, libellés, boutons), camion en mouvement mesuré le long de la courbe, aucune erreur console. Déployé.
+
+## Pass 13 — Scène isométrique 3D
+
+- `src/components/LiveStage.tsx` : un petit monde en projection dimétrique (caméra tournée de 20° pour que la route traverse la carte), tout calculé depuis un seul repère 3D : **camion** en volumes ombrés (caisse, cabine, capot, pare-brise et vitre latérale en dégradé bordeaux, bande et « 548 » posés sur la face, phare, pneus/jantes laiton à rayons qui tournent, ombre portée floutée), **dépôt 548** avec enseigne laiton et porte, **maison** du client avec toit bordeaux, pignon, porte et fenêtre (qui respire pendant le service, toit laiton une fois terminé), **route** en ruban avec ligne médiane qui défile, **traînée** laiton lumineuse synchronisée, **ondes** elliptiques au sol devant la porte, **grille** au sol. Le camion avance le long de la route (SMIL), grossit légèrement en approchant, tangue sur ses suspensions ; à l’arrêt il « respire ».
+- Vérifié dans Edge (en route, planifié, terminé) : scène nette, libellés lisibles, aucune erreur.

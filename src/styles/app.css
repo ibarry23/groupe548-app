@@ -2894,93 +2894,171 @@ select.input {
   text-decoration-color: rgba(217, 188, 128, 0.5);
 }
 
-/* the road */
-.road {
+/* the isometric stage */
+.stage {
   display: block;
   width: 100%;
   height: auto;
-  margin: 10px 0 2px;
-  overflow: visible;
+  margin: 8px 0 0;
 }
-.road__base {
+.stage__grid {
   fill: none;
-  stroke: rgba(251, 248, 243, 0.28);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-dasharray: 3 7;
+  stroke: rgba(251, 248, 243, 0.07);
+  stroke-width: 0.6;
 }
-.live--en-route .road__base {
+.stage__road {
+  fill: none;
+  stroke: rgba(251, 248, 243, 0.1);
+  stroke-width: 15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.stage__lane {
+  fill: none;
+  stroke: rgba(251, 248, 243, 0.32);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 5 8;
+}
+.live--en-route .stage__lane {
   animation: road-flow 0.9s linear infinite;
 }
 @keyframes road-flow {
   to {
-    stroke-dashoffset: -10;
+    stroke-dashoffset: -13;
   }
 }
-.road__trail {
+.stage__trail {
   fill: none;
   stroke: var(--brass-300);
-  stroke-width: 3;
+  stroke-width: 2.6;
   stroke-linecap: round;
+  stroke-linejoin: round;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
 }
-.road__depot circle {
-  fill: var(--brass-300);
-  stroke: rgba(59, 15, 24, 0.9);
-  stroke-width: 3;
-}
-.road__label {
+.stage__label {
   font-family: var(--font-ui);
   font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.03em;
   fill: rgba(251, 248, 243, 0.78);
 }
-.road__ripple {
+.stage__ripple {
   fill: none;
   stroke: var(--brass-300);
-  stroke-width: 1.5;
+  stroke-width: 1.3;
 }
-.road__house {
-  fill: var(--bdx-900);
-  stroke: var(--brass-300);
-  stroke-width: 1.5;
+/* buildings: three shades, light from the upper left */
+.bld__top {
+  fill: #f4eee4;
 }
-.road__glyph {
-  fill: none;
-  stroke: var(--brass-300);
-  stroke-width: 2.2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.bld__side {
+  fill: #e6dccb;
 }
-.live--in-progress .road__house {
+.bld__front {
+  fill: #cfc1a8;
+}
+.bld__door {
+  fill: #5a1a24;
+}
+.bld__window {
+  fill: #d9bc80;
+  opacity: 0.9;
+}
+.bld__sign {
   fill: var(--brass-500);
 }
-.live--in-progress .road__glyph {
-  stroke: var(--bdx-900);
+.bld__text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 6.2px;
+  fill: #5a1a24;
+  letter-spacing: 0.04em;
 }
-.live--done .road__house {
+.roof__side {
+  fill: #8a2f3d;
+}
+.roof__back {
+  fill: #6b2230;
+}
+.roof__gable {
+  fill: #5a1a24;
+}
+.stage__house--busy .bld__window {
+  animation: window-glow 1.6s ease-in-out infinite;
+}
+@keyframes window-glow {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+.stage__house--done .roof__side {
+  fill: var(--brass-500);
+}
+.stage__house--done .roof__back {
+  fill: var(--brass-700);
+}
+/* the truck */
+.truck__shadow {
+  fill: #000;
+  opacity: 0.4;
+}
+.truck__side {
+  fill: #efe7d9;
+}
+.truck__front {
+  fill: #d8ccb6;
+}
+.truck__stripe {
+  fill: #5a1a24;
+}
+.truck__brass {
+  fill: var(--brass-500);
+}
+.truck__text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 5.6px;
+  fill: #5a1a24;
+  letter-spacing: 0.04em;
+}
+.truck__glass {
+  stroke: rgba(251, 248, 243, 0.5);
+  stroke-width: 0.4;
+}
+.truck__light {
+  fill: #ffe9a8;
+}
+.truck__tire {
+  fill: #221316;
+}
+.truck__hub {
   fill: var(--brass-300);
-  stroke: var(--brass-300);
 }
-.live--done .road__glyph {
-  stroke: var(--bdx-900);
-}
-.road__truckbg {
-  fill: var(--on-brand);
-  stroke: var(--brass-300);
-  stroke-width: 1.5;
-}
-.road__truckico {
-  fill: none;
-  stroke: var(--bdx-700);
-  stroke-width: 1.7;
+.truck__spokes path {
+  stroke: #5a1a24;
+  stroke-width: 0.8;
   stroke-linecap: round;
-  stroke-linejoin: round;
 }
-.live--scheduled .road__truck {
+.live--en-route .truck__bob {
+  animation: truck-bob 0.5s ease-in-out infinite;
+}
+.live--scheduled .stage__truck {
   animation: truck-idle 3.2s ease-in-out infinite;
+}
+@keyframes truck-bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -0.7px;
+  }
 }
 @keyframes truck-idle {
   0%,
@@ -2988,11 +3066,11 @@ select.input {
     translate: 0 0;
   }
   50% {
-    translate: 0 -3px;
+    translate: 0 -2px;
   }
 }
-.live--done .road__truck {
-  opacity: 0.55;
+.live--done .stage__truck {
+  opacity: 0.6;
 }
 
 /* the five steps */
@@ -3116,8 +3194,10 @@ select.input {
 }
 @media (prefers-reduced-motion: reduce) {
   .live__sweep,
-  .road__base,
-  .road__truck,
+  .stage__lane,
+  .stage__truck,
+  .truck__bob,
+  .stage__house--busy .bld__window,
   .steps__item--now .steps__dot,
   .status--live::before,
   .live-row__ico {
