@@ -1,8 +1,8 @@
-import { Component, useEffect, useLayoutEffect, type ReactNode } from 'react';
+import { Component, useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
 import { HashRouter, Navigate, NavLink, Route, Routes, useLocation, useNavigationType } from 'react-router-dom';
 import { AppProvider, useApp } from '../lib/store';
 import { Icon, type IconName } from '../components/Icons';
-import { OfflineBar, ToastHost } from '../components/ui';
+import { Button, OfflineBar, ToastHost } from '../components/ui';
 import { Home } from '../screens/Home';
 import { Services } from '../screens/Services';
 import { ServiceDetail } from '../screens/ServiceDetail';
@@ -61,6 +61,75 @@ function TabBar() {
   );
 }
 
+const DISMISS_KEY = 'g548.installDismissed';
+const isStandalone = () => window.matchMedia?.('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isMobile = () => /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+
+/** Invites phone visitors to install the app; shown once per two weeks, never inside the quote flow. */
+function InstallBanner() {
+  const { t } = useApp();
+  const { pathname } = useLocation();
+  const [show, setShow] = useState(false);
+  const [canPrompt, setCanPrompt] = useState(!!window.__g548Install);
+  useEffect(() => {
+    if (isStandalone() || !isMobile()) return;
+    try {
+      const last = Number(localStorage.getItem(DISMISS_KEY) || 0);
+      if (Date.now() - last < 14 * 24 * 3600 * 1000) return;
+    } catch {
+      /* storage blocked */
+    }
+    const id = window.setTimeout(() => setShow(true), 2600);
+    const on = () => setCanPrompt(true);
+    window.addEventListener('g548-installable', on);
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener('g548-installable', on);
+    };
+  }, []);
+  if (!show || pathname.startsWith('/quote')) return null;
+  const dismiss = () => {
+    try {
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    } catch {
+      /* ignore */
+    }
+    setShow(false);
+  };
+  const install = async () => {
+    const e = window.__g548Install;
+    if (!e) return;
+    await e.prompt();
+    const { outcome } = await e.userChoice;
+    window.__g548Install = undefined;
+    if (outcome === 'accepted') setShow(false);
+    else dismiss();
+  };
+  return (
+    <div className="install-banner" role="dialog" aria-label={t.more.bannerTitle}>
+      <img className="install-banner__icon" src={`${import.meta.env.BASE_URL}icon-192.png`} alt="" width={44} height={44} />
+      <div className="install-banner__body">
+        <strong>{t.more.bannerTitle}</strong>
+        <span>{canPrompt ? t.more.bannerBody : isIos() ? t.more.bannerIos : t.more.bannerMenu}</span>
+        <div className="install-banner__actions">
+          {canPrompt && (
+            <Button size="sm" icon="plus" onClick={install}>
+              {t.more.installBtn}
+            </Button>
+          )}
+          <button type="button" className="link" onClick={dismiss}>
+            {t.more.bannerLater}
+          </button>
+        </div>
+      </div>
+      <button type="button" className="iconbtn install-banner__close" onClick={dismiss} aria-label={t.common.close}>
+        <Icon name="x" size={18} />
+      </button>
+    </div>
+  );
+}
+
 /** Last line of defence: a runtime error shows a bilingual recovery screen instead of a blank page. */
 class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
   state = { error: null as Error | null };
@@ -105,6 +174,7 @@ function Shell() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <TabBar />
+      <InstallBanner />
       <ToastHost />
     </>
   );

@@ -91,6 +91,7 @@ export function BrandClip({
 }) {
   const host = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
+  const [near, setNear] = useState(false);
   const [ratio, setRatio] = useState(0);
   const [capIndex, setCapIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -99,14 +100,19 @@ export function BrandClip({
     const el = host.current;
     if (!el || !('IntersectionObserver' in window)) {
       setInView(true);
+      setNear(true);
       return;
     }
     const io = new IntersectionObserver(([e]) => e.isIntersecting && setInView(true), { threshold: 0.1 });
     io.observe(el);
+    // Load the video only once the card is within ~2 screens, so first paint stays light.
+    const near = new IntersectionObserver(([e]) => e.isIntersecting && setNear(true), { rootMargin: '1200px 0px' });
+    near.observe(el);
     // Never leave a clip invisible: reveal after a moment even if the observer stays quiet.
     const fallback = window.setTimeout(() => setInView(true), 1800);
     return () => {
       io.disconnect();
+      near.disconnect();
       window.clearTimeout(fallback);
     };
   }, []);
@@ -127,7 +133,7 @@ export function BrandClip({
   const label = captions?.length ? captions[capIndex] : caption;
   return (
     <div ref={host} className={`bclip bclip--${shape} ${inView ? 'bclip--in' : ''} ${className}`} aria-hidden="true">
-      <AmbientVideo src={src} poster={poster} className="ambient--clip" onVideo={onVideo} />
+      {near ? <AmbientVideo src={src} poster={poster} className="ambient--clip" onVideo={onVideo} /> : <img className="ambient__poster bclip__poster" src={poster} alt="" decoding="async" />}
       <span className="bclip__shade" />
       <span className="bclip__frame" />
       <span className="bclip__sweep" />
