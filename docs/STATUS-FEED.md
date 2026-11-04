@@ -15,6 +15,11 @@ L’app peut montrer au client où en est son service : **planifié → équipe 
 
 > Ne mettez **jamais** de nom, d’adresse ni de téléphone dans cette feuille : elle est lisible par quiconque a le lien. La référence (ex. `G548-7KQ2`) ne révèle rien.
 
+## Feuille actuelle
+
+La feuille **Suivi 548** existe déjà dans le compte Google de Groupe 548 et est branchée sur l’app :
+https://docs.google.com/spreadsheets/d/17NRnJ-qT7yRmPFNqvFffu_9rLr5BdWLWHKyl8Sa91FE/edit — le répartiteur n’a qu’à y écrire. Google republie le CSV automatiquement ; comptez jusqu’à quelques minutes avant que l’app voie un changement.
+
 ## 2. Activer dans l’app (une seule fois)
 
 Dans `.env` :
