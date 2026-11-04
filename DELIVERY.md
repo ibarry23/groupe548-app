@@ -166,6 +166,8 @@ Living icons (CSS/SVG, no assets): stroke draw-on for check lists, trust facts a
 - **`BrandClip`** (`src/components/Media.tsx`) dresses every clip in the identity: a brass hairline inset frame, the "548" monogram, a bordeaux shade at the foot, a scroll-triggered entrance with a brass light sweep (fallback reveal after 1.8 s), and — on the "En 10 secondes" sequences — **captions keyed to the video's time** that name each action as it happens (e.g. Comptoirs → Planchers → Finitions), with a brass progress hairline. Process-step clips carry a serif numeral (01–04); the callback clip on confirmation and request detail carries "On vous recontacte". Captions live in `src/data/services.ts` (`taskCaptions`, FR/EN).
 - **Tab bar** now belongs too: the active tab is a bordeaux pill whose icon draws itself on, with a brass dot under the label and a soft spring on change; a brass hairline tops the bar.
 - All seven service sequences are in (painting completed), all loops use long dissolves, composer settings in Higgsfield were restored to 1:1 / 5 s.
+- **Install invitation**: on a phone browser (not when already installed), a card slides up ~2.6 s after the first screen: on Android/Chrome it triggers the native install prompt; on iPhone it gives the Share → "Sur l'écran d'accueil" steps; "Plus tard" hides it for two weeks. Never shown inside the quote flow.
+- **Lighter first load**: branded clips mount their video only when the card comes within ~1200 px of the viewport (the poster shows until then), so Home no longer loads every sequence up front.
 
 Remaining, deliberately not done: Capacitor status-bar styling per screen (needs the native shells to test), and in-app reading of the website guides (the site is a SPA; links open in the browser).
 
